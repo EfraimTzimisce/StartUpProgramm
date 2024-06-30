@@ -1,0 +1,20 @@
+import os
+import shutil
+
+# Add to startup config
+def add_to_startup(file_path):
+    startup_folder = os.path.join(os.getenv('APPDATA'), 'Microsoft\\Windows\\Start Menu\\Programs\\Startup')
+    shortcut_path = os.path.join(startup_folder, "DesiredProgram.lnk")
+    target_file_path = os.path.abspath(file_path)
+    shell = win32com.client.Dispatch("WScript.Shell")
+    shortcut = shell.CreateShortCut(shortcut_path)
+    shortcut.Targetpath = target_file_path
+    shortcut.WorkingDirectory = os.path.dirname(target_file_path)
+    shortcut.save()
+
+# Remove from startup config
+def remove_from_startup():
+    startup_folder = os.path.join(os.getenv('APPDATA'), 'Microsoft\\Windows\\Start Menu\\Programs\\Startup')
+    shortcut_path = os.path.join(startup_folder, "DesiredProgram.lnk")
+    if os.path.exists(shortcut_path):
+        os.remove(shortcut_path)
